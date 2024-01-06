@@ -12,10 +12,21 @@ def getNumber(message : str) -> int :
     except:
         return getNumber("\nError : Veuillez entrer un entier : ")
 
+#Creation d'une matrice de taille n*n
+def startMatrice(number : int):
+    square = []
+    for i in range(number):
+        line = [0] * number
+        square.append(line)
+
+    return square
+
 
 # Programme principal
 print("\n|--- Veuiller entrer un nombre positif impair qui representera la taille d'une n d'une matrice et nous vous retournerons le carré magique correspondant ---|\n")
 
 number = getNumber("\tNombre : ")
 
-print("Bonne valeur !")
+square = startMatrice(number)
+
+print(square)
