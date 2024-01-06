@@ -35,18 +35,29 @@ def printMatrice(matrice : list) -> None :
     for elt in matrice:
         print("\t",elt)
 
-def moveToDiag(matrice : list, pos : int) -> list :
+#Deplacement vers la diagonale
+def moveToDiag(matrice : list, pos : int, dataSet : list) -> list :
+    if len(dataSet) > 0:
+        if matrice[pos[0]][pos[1]] == 0:
+            matrice[pos[0]][pos[1]] = dataSet[0]
+            dataSet.remove(dataSet[0])
+
+
     return [matrice, pos]
 
 # Programme principal
 print("\n|--- Veuiller entrer un nombre positif impair qui representera la taille d'une n d'une matrice et nous vous retournerons le carré magique correspondant ---|\n")
 
-number = getNumber("\tNombre : ")
+number = getNumber("\tNombre : ") # Recuperation de la taille de la matrice
 
-dataSet = listOfNumber(number)
+dataSet = listOfNumber(number) # Construction des nombres qui seront dans mon carré magique
 
-square = startMatrice(number)
+square = startMatrice(number) # Fabrication du carré de base
+
+pos = [0] # Position de depart (juste la ligne)
+
+pos.append(round((len(square[0]) // 2))) # Position de depart (ajout de la colonne)
+
+square, pos = moveToDiag(square, pos, dataSet)
 
 printMatrice(square)
-
-print(dataSet)
