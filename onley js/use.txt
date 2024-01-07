@@ -1,0 +1,10 @@
+the javascript code in this folder can be easy execute with the command <<node magicjs>>
+
+inside the code you can change the magic-square size , by default it is at 5.
+
+
+thank you for watching
+if you have a problem , contact me at 
+
+Watsapp: +237620300235
+email: landry.ngueagho@facsciences-uy1.cm  /OR/ expert237237@gmail.com
