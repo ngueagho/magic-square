@@ -22,3 +22,9 @@
     height: 50px;
     margin-left: 100px;
 }
+
+table{
+    padding-left: 45%;
+    /* align-items: center ; */
+    padding-top: 100px;
+}
