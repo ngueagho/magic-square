@@ -14,6 +14,7 @@ def getNumber(message : str) -> int :
 
 #Génération des nombres à utiliser
 def listOfNumber(number : int) -> list : 
+
     myList = []
     for i in range(number*number):
         myList.append((i+1))
@@ -22,6 +23,7 @@ def listOfNumber(number : int) -> list :
 
 #Creation d'une matrice de taille n*n
 def startMatrice(number : int) -> list : 
+
     square = []
     for i in range(number):
         line = [0] * number
@@ -31,39 +33,62 @@ def startMatrice(number : int) -> list :
 
 #Affichage de la matrice
 def printMatrice(matrice : list) -> None :
+
     print("\nCarré magique : \n")
     for elt in matrice:
         print("\t",elt)
 
 #Deplacement vers la diagonale
 def moveToDiag(matrice : list, pos : int, dataSet : list) -> list :
-    if len(dataSet) > 0:
-        # Cas de base
-        if matrice[pos[0]][pos[1]] == 0:
-            matrice[pos[0]][pos[1]] = dataSet[0]
-            dataSet.remove(dataSet[0])
 
-            return [matrice, pos]
+    try:
 
-
-        else:
-            pos[0] -= 1
-            pos[1] += 1
-            
-            if pos[0] >= 0 and pos[1] <= len(matrice[0]):
+        if len(dataSet) > 0:
+            # Cas de base
+            if matrice[pos[0]][pos[1]] == 0:
                 matrice[pos[0]][pos[1]] = dataSet[0]
                 dataSet.remove(dataSet[0])
-                return moveToDiag(matrice, pos, dataSet)
-            
-            pos[0] += 1
-            pos[1] -= 1
-            
+
+                return [matrice, pos]
+
+            else:
+                pos[0] -= 1
+                pos[1] += 1
+                
+                if pos[0] >= 0 and pos[1] <= len(matrice[0]): 
+                    matrice[pos[0]][pos[1]] = dataSet[0]
+                    dataSet.remove(dataSet[0])
+                    return moveToDiag(matrice, pos, dataSet)
+                
+                pos[0] += 1
+                pos[1] -= 1
+                
+                return [matrice, pos]
+
+        return [matrice, pos]
+    
+    except:
+        pos[0] += 1
+        pos[1] -= 1
+        return [matrice, pos]
+
+#Deplacement en L
+def moveToL(matrice : list, pos : int, dataSet : list) -> list :
+
+    if pos[0] != 0: #Rassurons nous premièrement que nous somme sur la première ligne
+        return [matrice, pos] #si non, on essaie une autre methode
+    
+    else:
+        if matrice[len(matrice)-1][pos[1]+1] != 0 : #Testons la fin du L
+            return [matrice, pos] #Si c'est déjà occupé, on sort
+        else:
+            matrice[len(matrice)-1][pos[1]+1] = dataSet[0]
+            dataSet.remove(dataSet[0])
+            pos[0] = len(matrice)-1
+            pos[1] = pos[1]+1
             return [matrice, pos]
-
-
-
-    return [matrice, pos]
-
+        
+    
 # Programme principal
 print("\n|--- Veuiller entrer un nombre positif impair qui representera la taille d'une n d'une matrice et nous vous retournerons le carré magique correspondant ---|\n")
 
@@ -77,15 +102,15 @@ pos = [0] # Position de depart (juste la ligne)
 
 pos.append(round((len(square[0]) // 2))) # Position de depart (ajout de la colonne)
 
-print(pos)
-
 square, pos = moveToDiag(square, pos, dataSet)
 
 square, pos = moveToDiag(square, pos, dataSet)
 
+square, pos = moveToL(square, pos, dataSet)
+
+square, pos = moveToDiag(square, pos, dataSet)
 
 printMatrice(square)
 
-print(pos)
-
-# print(dataSet)
+print("Pos : ",pos)
+print("DataSet restant : ", dataSet)
