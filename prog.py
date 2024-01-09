@@ -106,7 +106,15 @@ def moveToLCouchee(matrice : list, pos : int, dataSet : list) -> list :
         pos[1] = 0
         return [matrice, pos]
 
-
+#Cas echéant
+def moveDown(matrice : list, pos : int, dataSet : list) -> list : 
+    if matrice[pos[0]+1][pos[1]] != 0 :
+        return [matrice, pos]
+    else:
+        matrice[pos[0]+1][pos[1]] = dataSet[0]
+        dataSet.remove(dataSet[0])
+        pos[0] += 1
+        return [matrice, pos]
 
 
 
@@ -134,6 +142,8 @@ square, pos = moveToDiag(square, pos, dataSet)
 square, pos = moveToLCouchee(square, pos, dataSet)
 
 square, pos = moveToDiag(square, pos, dataSet)
+
+square, pos = moveDown(square, pos, dataSet)
 
 printMatrice(square)
 
