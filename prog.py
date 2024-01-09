@@ -56,6 +56,11 @@ def moveToDiag(matrice : list, pos : int, dataSet : list) -> list :
                 pos[1] += 1
                 
                 if pos[0] >= 0 and pos[1] <= len(matrice[0]): 
+                    if matrice[pos[0]][pos[1]] != 0:
+                        pos[0] += 1
+                        pos[1] -= 1
+                        return [matrice, pos]
+
                     matrice[pos[0]][pos[1]] = dataSet[0]
                     dataSet.remove(dataSet[0])
                     return moveToDiag(matrice, pos, dataSet)
@@ -86,9 +91,25 @@ def moveToL(matrice : list, pos : int, dataSet : list) -> list :
             dataSet.remove(dataSet[0])
             pos[0] = len(matrice)-1
             pos[1] = pos[1]+1
-            return [matrice, pos]
-        
+            return [matrice, pos]    
     
+#Deplacement en L couchée
+def moveToLCouchee(matrice : list, pos : int, dataSet : list) -> list :
+
+    if matrice[pos[0] - 1][0] != 0 :
+        return [matrice, pos]
+    
+    else:
+        matrice[pos[0]-1][0] = dataSet[0]
+        dataSet.remove(dataSet[0])
+        pos[0] = pos[0] - 1
+        pos[1] = 0
+        return [matrice, pos]
+
+
+
+
+
 # Programme principal
 print("\n|--- Veuiller entrer un nombre positif impair qui representera la taille d'une n d'une matrice et nous vous retournerons le carré magique correspondant ---|\n")
 
@@ -107,6 +128,10 @@ square, pos = moveToDiag(square, pos, dataSet)
 square, pos = moveToDiag(square, pos, dataSet)
 
 square, pos = moveToL(square, pos, dataSet)
+
+square, pos = moveToDiag(square, pos, dataSet)
+
+square, pos = moveToLCouchee(square, pos, dataSet)
 
 square, pos = moveToDiag(square, pos, dataSet)
 
