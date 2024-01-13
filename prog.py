@@ -7,6 +7,8 @@ def getNumber(message : str) -> int :
             return getNumber("\nLe nombre doit être supérieur ou égal à 3, veuillez entrer une valeur correcte : ")
         if number % 2 == 0:
             return getNumber("\nLe nombre doit être impair, veuillez entrer une valeur correcte : ")
+        if number >= 29:
+            return getNumber("\nNombre trop grand, la taille maximal du carré est de 27, entrer une autre valeur : ")
         return number
     
     except:
@@ -41,7 +43,6 @@ def printMatrice(matrice : list) -> None :
 #Remplissage initial
 def initialInsert(matrice : list, pos : int, dataSet : list) -> list :
     if len(dataSet) > 0:
-        # Cas de base
         if matrice[pos[0]][pos[1]] == 0:
             matrice[pos[0]][pos[1]] = dataSet[0]
             dataSet.remove(dataSet[0])
@@ -76,7 +77,6 @@ def moveToDiag(matrice : list, pos : int, dataSet : list) -> list :
     else:
         return [matrice, pos]
     
-
 #Deplacement en L
 def moveToL(matrice : list, pos : int, dataSet : list) -> list :
 
@@ -148,8 +148,7 @@ def moveDown(matrice : list, pos : int, dataSet : list) -> list :
         return [matrice, pos]
 
 
-
-# Programme principal
+#-------------------------------------- Programme principal --------------------------------------#
 print("\n|--- Veuiller entrer un nombre positif impair qui representera la taille d'une n d'une matrice et nous vous retournerons le carré magique correspondant ---|\n")
 
 number = getNumber("\tNombre : ") # Recuperation de la taille de la matrice
@@ -169,6 +168,3 @@ square, pos = initialInsert(square, pos, dataSet)
 square, pos = moveToDiag(square, pos, dataSet)
 
 printMatrice(square)
-
-print("Pos : ",pos)
-print("DataSet restant : ", dataSet)
