@@ -46,7 +46,7 @@ def initialInsert(matrice : list, pos : int, dataSet : list) -> list :
             matrice[pos[0]][pos[1]] = dataSet[0]
             dataSet.remove(dataSet[0])
             pos[0] = 0
-            pos[1] = 1
+            pos[1] = len(matrice) // 2
             return [matrice, pos]
         
         else:
