@@ -38,82 +38,113 @@ def printMatrice(matrice : list) -> None :
     for elt in matrice:
         print("\t",elt)
 
+#Remplissage initial
+def initialInsert(matrice : list, pos : int, dataSet : list) -> list :
+    if len(dataSet) > 0:
+        # Cas de base
+        if matrice[pos[0]][pos[1]] == 0:
+            matrice[pos[0]][pos[1]] = dataSet[0]
+            dataSet.remove(dataSet[0])
+            pos[0] = 0
+            pos[1] = 1
+            return [matrice, pos]
+        
+        else:
+            return [matrice, pos]
+    return [matrice, pos]
+
 #Deplacement vers la diagonale
 def moveToDiag(matrice : list, pos : int, dataSet : list) -> list :
 
-    try:
+    if len(dataSet) > 0:
 
-        if len(dataSet) > 0:
-            # Cas de base
-            if matrice[pos[0]][pos[1]] == 0:
-                matrice[pos[0]][pos[1]] = dataSet[0]
-                dataSet.remove(dataSet[0])
-
+        if pos[0] > 0 and pos[1] <= len(matrice)-2: #On se rassure que la position actuelle permet d'effectuer un deplacement à la diagonale
+            if matrice[pos[0]-1][pos[1]+1] != 0:
+                moveToL(matrice, pos, dataSet)
                 return [matrice, pos]
-
             else:
+                matrice[pos[0]-1][pos[1]+1] = dataSet[0]
+                dataSet.remove(dataSet[0])
                 pos[0] -= 1
                 pos[1] += 1
-                
-                if pos[0] >= 0 and pos[1] <= len(matrice[0]): 
-                    if matrice[pos[0]][pos[1]] != 0:
-                        pos[0] += 1
-                        pos[1] -= 1
-                        return [matrice, pos]
-
-                    matrice[pos[0]][pos[1]] = dataSet[0]
-                    dataSet.remove(dataSet[0])
-                    return moveToDiag(matrice, pos, dataSet)
-                
-                pos[0] += 1
-                pos[1] -= 1
-                
+                moveToDiag(matrice, pos, dataSet)
                 return [matrice, pos]
-
+            
+        else:
+            moveToL(matrice, pos, dataSet)
+            return [matrice, pos]
+    else:
         return [matrice, pos]
     
-    except:
-        pos[0] += 1
-        pos[1] -= 1
-        return [matrice, pos]
 
 #Deplacement en L
 def moveToL(matrice : list, pos : int, dataSet : list) -> list :
 
-    if pos[0] != 0: #Rassurons nous premièrement que nous somme sur la première ligne
-        return [matrice, pos] #si non, on essaie une autre methode
-    
-    else:
-        if matrice[len(matrice)-1][pos[1]+1] != 0 : #Testons la fin du L
-            return [matrice, pos] #Si c'est déjà occupé, on sort
+    if len(dataSet) > 0:
+
+        if pos[0] != 0: #Rassurons nous premièrement que nous somme sur la première ligne
+            moveToLCouchee(matrice, pos, dataSet) #si non, on essaie une autre methode
+            return [matrice, pos]
+
+        elif pos[1] + 1 >= len(matrice): #Rassurons nous que l'on puisse deposer à la fin du L
+            moveToLCouchee(matrice, pos, dataSet)
+            return [matrice, pos]
         else:
-            matrice[len(matrice)-1][pos[1]+1] = dataSet[0]
-            dataSet.remove(dataSet[0])
-            pos[0] = len(matrice)-1
-            pos[1] = pos[1]+1
-            return [matrice, pos]    
+            if matrice[len(matrice)-1][pos[1]+1] != 0 : #Testons la fin du L
+                moveToLCouchee(matrice, pos, dataSet) #Si c'est déjà occupé, on sort
+                return [matrice, pos]
+            else:
+                matrice[len(matrice)-1][pos[1]+1] = dataSet[0]
+                dataSet.remove(dataSet[0])
+                pos[0] = len(matrice)-1
+                pos[1] = pos[1]+1
+                moveToDiag(matrice, pos, dataSet) 
+                return [matrice, pos]  
+    else:
+        return [matrice, pos] 
     
 #Deplacement en L couchée
 def moveToLCouchee(matrice : list, pos : int, dataSet : list) -> list :
 
-    if matrice[pos[0] - 1][0] != 0 :
-        return [matrice, pos]
+    if len(dataSet) > 0 :
+
+        if pos[1] != len(matrice)-1 : #Rassurons nous que nous sommes à la derniere colonne
+            moveDown(matrice, pos, dataSet)
+            return [matrice, pos]
+        
+        if pos[0] == 0:
+            moveDown(matrice, pos, dataSet)
+            return [matrice, pos]
+        
+        else:
+            if matrice[pos[0]-1][0] != 0:
+                moveDown(matrice, pos, dataSet)
+                return [matrice, pos]
+            else:
+                matrice[pos[0]-1][0] = dataSet[0]
+                dataSet.remove(dataSet[0])
+                pos[0] = pos[0] - 1
+                pos[1] = 0
+                moveToDiag(matrice, pos, dataSet)
+                return [matrice, pos]
     
     else:
-        matrice[pos[0]-1][0] = dataSet[0]
-        dataSet.remove(dataSet[0])
-        pos[0] = pos[0] - 1
-        pos[1] = 0
         return [matrice, pos]
 
 #Cas echéant
 def moveDown(matrice : list, pos : int, dataSet : list) -> list : 
-    if matrice[pos[0]+1][pos[1]] != 0 :
-        return [matrice, pos]
+    if len(dataSet) > 0 :
+
+        if matrice[pos[0]+1][pos[1]] != 0 :
+            print("Error")
+            return [matrice, pos]
+        else:
+            matrice[pos[0]+1][pos[1]] = dataSet[0]
+            dataSet.remove(dataSet[0])
+            pos[0] += 1
+            moveToDiag(matrice, pos, dataSet)
+            return [matrice, pos]
     else:
-        matrice[pos[0]+1][pos[1]] = dataSet[0]
-        dataSet.remove(dataSet[0])
-        pos[0] += 1
         return [matrice, pos]
 
 
@@ -131,19 +162,11 @@ pos = [0] # Position de depart (juste la ligne)
 
 pos.append(round((len(square[0]) // 2))) # Position de depart (ajout de la colonne)
 
-square, pos = moveToDiag(square, pos, dataSet)
+####################################################
+
+square, pos = initialInsert(square, pos, dataSet)
 
 square, pos = moveToDiag(square, pos, dataSet)
-
-square, pos = moveToL(square, pos, dataSet)
-
-square, pos = moveToDiag(square, pos, dataSet)
-
-square, pos = moveToLCouchee(square, pos, dataSet)
-
-square, pos = moveToDiag(square, pos, dataSet)
-
-square, pos = moveDown(square, pos, dataSet)
 
 printMatrice(square)
 
