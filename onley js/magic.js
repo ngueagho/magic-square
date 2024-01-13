@@ -1,0 +1,83 @@
+// this function will verify wheter the next case whre we want to is empty and exist 
+function exist_and_empty(i,j,n,square) {
+    if( 0<=i && 0<=j && i<=n-1 && j<=n-1){
+        if(square[i][j] == 0){
+            return 0;
+        }
+        else{
+            return 1 ;
+        }
+    }
+    else {
+        return 1 ;
+    }
+}
+
+
+function magic_square() {
+    // let n = document.getElementById("size").value;
+    // down there we try to see wether the square size is pair or not, if it is pair we add 1 to this size because we cannot generate a magic-square with a pair size
+
+    let n = 4;
+
+    if (n%2 ===0) {
+        n += 1;
+    }
+    // square creat
+    var square = new Array(n);
+    for (var i = 0; i < square.length; i++) {
+      square[i] = new Array(n);
+    }
+    // matrix filling
+    for (let i = 0; i < square.length; i++) {
+        for (let j = 0; j < square.length; j++) {
+            square[i][j] = 0;
+        }        
+    }
+
+    let index_i = 0;
+    let index_j = Math.floor(n/2);
+    let k = 1;
+    let insert_nomber = k;
+    square[index_i][index_j] = insert_nomber;
+    insert_nomber +=1
+
+
+    for ( k = 2; k <= n*n; k++) {
+
+        if (exist_and_empty(index_i-1,index_j+1,n,square)==0) {
+            index_i -= 1;
+            index_j += 1; 
+            square[index_i][index_j] = insert_nomber;
+            insert_nomber+=1;
+            console.log("1")
+        }
+        else if (exist_and_empty(index_i-1,(index_j-(n-1)),n,square)==0) {
+            index_i -= 1;
+            index_j =(index_j-(n-1));
+            square[index_i][index_j] = insert_nomber;
+            insert_nomber+=1;
+            console.log("2")
+        }
+        else if (exist_and_empty((index_i+(n-1)),index_j+1,n,square)==0) {
+            index_i = n-1;
+            index_j +=1 ;
+            square[index_i][index_j] = insert_nomber;
+            insert_nomber+=1;
+            console.log("3")
+        }
+        else{
+            console.log("error")
+            index_i +=1 ;
+            index_j = index_j;
+            square[index_i][index_j] = insert_nomber;
+            insert_nomber+=1;
+            console.log("4")
+        }
+        
+        console.log("k= "+k)
+        console.log(square);
+    }
+
+}
+magic_square();
